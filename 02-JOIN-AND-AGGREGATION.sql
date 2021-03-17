@@ -123,3 +123,83 @@ SELECT emp.employee_id, emp.first_name,
     man.first_name
 FROM employees emp JOIN employees man
                     ON emp.manager_id = man.manger_id;
+                    
+----------------------------------------------
+-- Aggregation (집계)
+----------------------------------------------
+-- 여러 개의 값을 집계하여 하나의 결과 값을 산출
+
+-- count : 갯수 세기 함수
+-- employees 테이블은 몇 개의 레코드를 가지고 있는가?
+SELECT COUNT(*)
+FROM employees;
+
+-- 특정 컬럼을 명시함녀 NULL인 것은 무시
+SELECT COUNT(commission_pct)
+FROM employees;
+-- 위와 동일
+SELECT COUNT(*)
+FROM employees
+WHERE commission_pct IS NOT NULL;
+
+-- 합계 함수 : SUM
+-- 급여의 총 합?
+SELECT SUM(salary)
+FROM employees;
+
+-- 평균 함수 : AVG
+-- 평균 급여 선정
+SELECT AVG(salary)
+FROM employees;
+
+-- 사원들이 받는 평균 커미션 비율
+SELECT AVG(commission_pct)
+FROM employees;
+-- NULL 데이터는 집계에서 배제
+SELECT AVG(nvl(commission_pct, 0))
+FROM employees;
+
+-- NULL이 포합된 집계는 NULL 값을 포함할 것인지 아닌지를 결정하고 집계
+
+-- salary의 최솟값, 최댓값, 평균값, 중앙값
+SELECT MIN(salary) 최소값, MAX(salary) 최대값,
+    AVG(salary) 평균값, MEDIAN(salary) 중앙값
+FROM employees;
+
+-- 흔히 범하는 오류
+-- 부서의 아이디, 급여 평균을 출력하고자 할 때
+/*
+SELECT department_id, AVG(salary)
+FROM employees; -- ERROR
+*/
+
+
+-- 만약에 부서별 평균 연봉을 구하려면?
+-- 부서별 GROUP을 지어준 데이터를 대상을 집계함수 수행
+SELECT department_id, ROUND(AVG(salary), 2)
+FROM employees                                                                                      
+GROUP BY department_id                                                                                                                                              
+ORDER BY department_id;                                 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+-- 집계함수를 사용한 SELECT 컬럼 목록에는
+-- 집계에 참여한 필드, 집계함수만 올 수 있다
+SELECT department_id, ROUND(AVG(salary), 2) sal_avg -- 별칭사용
+FROM employees
+GROUP BY department_id
+ORDER BY sal_avg DESC;
+
+-- 부서별 평균 급여를 산출 평균 급여가 7000이상인 부서를 출력
+/*
+SELECT department_id, AVG(salary)
+FROM employees
+WHERE AVG(salary) >= 7000 -- 이 시점에서는 ACG(salary) 가 수행되지 않은 상태
+GROUP BY department_id;
+*/
+-- ERROR : 집계 작업이 일어나기 전에 WHERE 절 수행
+
+SELECT department_id, AVG(salary)
+FROM employees
+GROUP BY department_id
+    HAVING AVG(salary) >= 7000      -- GROUP BY에 조건을 부여할 때
+ORDER BY department_id;
+
