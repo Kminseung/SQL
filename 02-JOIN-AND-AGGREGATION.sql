@@ -295,3 +295,24 @@ SELECT first_name, salary, hire_date FROM employees WHERE salary > 12000;
 -- 입사일 05/01/01 이전인 사람들 중 급여가 12000 이하인 직원
 SELECT first_name, salary, hire_date FROM employees
 WHERE hire_date < '05/01/01' AND NOT(salary > 12000);
+
+-- RANK 함수
+SELECT salary, first_name,
+    RANK() OVER(ORDER BY salary DESC) AS rank,
+    DENSE_RANK() OVER (ORDER BY salary DESC) as dense_rank,
+    ROW_NUMBER() OVER (ORDER BY salary DESC) as row_number,
+    rownum
+FROM employees;
+
+-- Hierarchical Query : 트리 형태의 구조를 추출
+-- ROOT 노드 : 조건 START WITH 로 설정
+-- LEAF 노드(가지) : 연결하기 위한 조건을 CONNECT BY PRIOR 로 설정
+-- employees 테이블로 조직도 그리기
+-- level(깊이)이라는 가상 컬럼을 사용
+SELECT level, first_name, manager_id, employee_id
+FROM employees
+START WITH manager_id IS NULL
+CONNECT BY PRIOR employee_id = manager_id
+ORDER BY level;
+
+-- 연습문제 : 위 트리 구조에 매니저의 이름도 출력
