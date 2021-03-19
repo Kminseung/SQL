@@ -7,7 +7,6 @@
     DROP USER C##KMS CASCADE - 연결된 객체도 모두 삭제
 권한을 갖고 있지 않으면 어떤 작업도 수행 불가능
 */
-CREATE USER C##KMS IDENTIFIED BY 7777;
 -- system으로 진행
 -- 사용자 정보 확인
 -- USER_USERS : 현재 사용자 관련 정보
@@ -21,6 +20,7 @@ SELECT * FROM USER_USERS;
 SELECT * FROM ALL_USERS;
 
 -- 로그인 권한 부여
+CREATE USER C##KMS IDENTIFIED BY 7777;
 GRANT CREATE SESSION TO C##KMS;     -- C##KMS에게 세션 생성(로그인) 권한 부여
 
 -- CREATE TABLE test(a NUMBER);     권한 불충분
@@ -61,6 +61,87 @@ GRANT dbuser TO KMS;    -- KMS 사용자에게 dbuser 역할을 부여
 
 -- 권한 회수 REBOKE
 REVOKE dbuser FROM KMS; -- KMS 사용자로부터 dbuser역할을 회수
+REVOKE SELECT ON hr.employees FROM C##KMS;
 
 -- 계정 삭제
 DROP USER KMS CASCADE;
+
+SHOW USER;
+SELECT * FROM hr.employees;
+
+--------------------------------------------------------------------------------
+-- DDL 
+--------------------------------------------------------------------------------
+CREATE TABLE test(a NUMBER);
+
+
+-- 내가 가진 table 확인
+SELECT * FROM tab;
+DESC test;
+
+-- 휴지통
+PURGE RECYCLEBIN;       -- 삭제된 테이블은 휴지통으로 들어감
+
+CREATE TABLE book (
+    book_id NUMBER(5),
+    title VARCHAR2(50),
+    author VARCHAR2(10),
+    pub_date DATE DEFAULT SYSDATE       -- 기본 값으로 현재시간 사용
+);
+
+DESC book;
+
+-- 서브쿼리를 활용한 테이블 생성
+-- hr.employees 테이블을 기반으로 일부 데이터를 추출
+-- 새 테이블
+
+GRANT SELECT ON hr.employees TO C##KMS;
+
+SELECT * FROM hr.employees WHERE job_id LIKE 'IT_%';
+
+CREATE TABLE it_emps AS (
+    SELECT * FROM hr.employees WHERE job_id LIKE 'IT_%');
+
+SELECT * FROM it_emps;
+
+CREATE TABLE emp_summary AS (
+    SELECT employee_id,
+           first_name|| ' ' ||last_name full_name,
+           hire_date, salary
+    FROM hr.employees
+);
+DESC emp_summary;
+SELECT * FROM emp_summary;
+
+-- author table
+DESC book;
+
+CREATE TABLE author(
+    author_id NUMBER(10),
+    author_name VARCHAR2(100) NOT NULL,
+    author_desc VARCHAR2(500),
+    PRIMARY KEY (author_id)
+);
+DESC author;
+
+-- book 테이블에 author 테이블 연결을 위해
+-- book 테이블의 author 컬럼을 삭제
+ALTER TABlE book
+DROP COLUMN author;
+DESC book;
+
+-- author 테이블 참조를 위한 author_id 컬럼을 book에 추가
+ALTER TABLE book
+ADD (author_id NUMBER(10));
+DESC book;
+
+- book 테이블의 PK로 사용할 book_id도 NUMBER(10)으로 변경
+ALTER TABLE book
+MODIFY (book_id NUMBER(10));
+DESC book;
+
+-- 제약조건의 추가 ADD CONSTRAINT
+-- book 테이블의 book_id를 PRIMARY KEY 제약조건 부여
+ALTER TABLE book
+ADD CONSTRAINT pk_book_id PRIMARY KEY(book_id);
+DESC book;
