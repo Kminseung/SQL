@@ -1,0 +1,55 @@
+----------------------
+-- DML : 데이터 조작어
+----------------------
+-- author table에 데이터 입력
+-- INSERT
+DESC author;
+
+-- 묵시적 방법 : 데이터 넣을 컬럼을 지정하지 않는 경우
+-- 정의된 순서에 따라서 값을 입력
+INSERT INTO author
+VALUES(1, '박경리', '토지 작가');
+
+-- 명시적 방법
+-- 데이터를 넣을 컬럼을 지정, 지정한 컬럼 순서대로 데이터를 제공,
+-- 명시되지 않은 컬럼은 NULL로 입력 -> 제약조건이 NOT NULL인 경우 오류
+INSERT INTO author(author_id, author_name)      -- 입력 컬럼 제공
+VALUES(2, '김영학');
+
+SELECT * FROM author;
+
+-- INSERT, UPDATE, DELETE 작업을 수행하면 Transaction이 수행
+-- 작업이 완료되었을 때
+-- 원래대로 복원 : ROLLBACK
+-- 영구 저장 : COMMIT
+COMMIT;
+
+-- BOOK 테이블 데이터 입력
+SELECT * FROM book;
+INSERT INTO book
+VALUES(1, '토지', sysdate, 1);
+
+INSERT INTO book
+VALUES(2, '살인자의 기억법', sysdate, 2);
+
+SELECT * FROM book;
+
+INSERT INTO book
+VALUES(3, '홍길동전', sysdate, 3);      -- author_id는 author.author_id를 FK참조하고 있으므로 제약조건 위반
+
+-- 트랜잭션 이전으로 복구하고 싶다면
+ROLLBACK;
+SELECT * FROM book;
+
+-- UPDATE table SET 컬럼명 = 값, 컬럼명 = 값 ... ;
+UPDATE author SET author_desc = '알쓸신잡 출연';
+SELECT * FROM author;
+
+-- UPDATE시 조건을 부여하지 않으면 모든 레코드 변경 -> 주의
+ROLLBACK;
+SELECT * FROM author;
+
+UPDATE author SET author_desc = '알쓸신잡 출연'
+WHERE author_id = '2';
+
+SELECT * FROM author;
