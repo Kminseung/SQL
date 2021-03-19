@@ -5,17 +5,17 @@ WHERE salary < (SELECT AVG(salary)
                 FROM employees);
                 
 -- P.02
-SELECT employee_id Á÷¿ø¹øÈ£, first_name ÀÌ¸§,
-    salary ±Þ¿©, ROUND(tmp.avg) Æò±Õ±Þ¿©, max_salary ÃÖ´ë±Þ¿©
+SELECT employee_id ì§ì›ë²ˆí˜¸, first_name ì´ë¦„,
+    salary ê¸‰ì—¬, ROUND(tmp.avg) í‰ê· ê¸‰ì—¬, max_salary ìµœëŒ€ê¸‰ì—¬
 FROM employees e, jobs j, (SELECT AVG(salary) avg, MAX(salary) max
                            FROM employees) tmp
 WHERE e.job_id = j.job_id AND
     salary >= tmp.avg AND salary <= tmp.max;
 
 -- P.03
-SELECT location_id µµ½Ã¾ÆÀÌµð, street_address °Å¸®¸í,
-       postal_code ¿ìÆí¹øÈ£, city µµ½Ã¸í,
-       state_province ÁÖ, country_id ³ª¶ó¾ÆÀÌµð
+SELECT location_id ë„ì‹œì•„ì´ë””, street_address ê±°ë¦¬ëª…,
+       postal_code ìš°íŽ¸ë²ˆí˜¸, city ë„ì‹œëª…,
+       state_province ì£¼, country_id ë‚˜ë¼ì•„ì´ë””
 FROM locations
 WHERE location_id = (SELECT location_id
                      FROM departments
@@ -25,7 +25,7 @@ WHERE location_id = (SELECT location_id
                                                 AND LOWER(last_name) = 'king'));
 
 -- P.04
-SELECT employee_id »ç¹ø, first_name ÀÌ¸§, salary ±Þ¿©
+SELECT employee_id ì‚¬ë²ˆ, first_name ì´ë¦„, salary ê¸‰ì—¬
 FROM employees
 WHERE salary < ANY (SELECT salary
                 FROM employees
@@ -33,39 +33,39 @@ WHERE salary < ANY (SELECT salary
 ORDER BY salary DESC;
 
 -- P.05
--- Á¶°ÇÀý ºñ±³
-SELECT employee_id Á÷¿ø¹øÈ£, first_name ÀÌ¸§,
-       salary ±Þ¿©, department_id ºÎ¼­¹øÈ£
+-- ì¡°ê±´ì ˆ ë¹„êµ
+SELECT employee_id ì§ì›ë²ˆí˜¸, first_name ì´ë¦„,
+       salary ê¸‰ì—¬, department_id ë¶€ì„œë²ˆí˜¸
 FROM employees
 WHERE (salary, department_id) IN (SELECT MAX(salary), department_id
                         FROM employees
                         GROUP BY department_id);
 
--- Å×ÀÌºí Á¶ÀÎ
-SELECT e.employee_id Á÷¿ø¹øÈ£, e.first_name ÀÌ¸§,
-       e.salary ±Þ¿©, e.department_id ºÎ¼­¹øÈ£
+-- í…Œì´ë¸” ì¡°ì¸
+SELECT e.employee_id ì§ì›ë²ˆí˜¸, e.first_name ì´ë¦„,
+       e.salary ê¸‰ì—¬, e.department_id ë¶€ì„œë²ˆí˜¸
 FROM employees e, (SELECT MAX(salary) ms, department_id did
                  FROM employees
                  GROUP BY department_id) tmp
 WHERE e.salary = tmp.ms AND e.department_id = tmp.did;
 
 -- P.06
-SELECT job_title ¾÷¹«¸í, SUM(salary) "¿¬ºÀ ÃÑÇÕ"
+SELECT job_title ì—…ë¬´ëª…, SUM(salary) "ì—°ë´‰ ì´í•©"
 FROM employees e, jobs j
 WHERE e.job_id = j.job_id
 GROUP BY job_title
 ORDER BY SUM(salary);
 
 -- P.07
-SELECT employee_id Á÷¿ø¹øÈ£, first_name ÀÌ¸§, salary ±Þ¿©
+SELECT employee_id ì§ì›ë²ˆí˜¸, first_name ì´ë¦„, salary ê¸‰ì—¬
 FROM employees e, (SELECT department_id did, ROUND(AVG(salary)) avg
                    FROM employees
                    GROUP BY department_id) tmp
 WHERE e.department_id = tmp.did AND e.salary > tmp.avg;
 
 -- P.08
-SELECT tmp.rn RN, employee_id »ç¹ø,
-        first_name ÀÌ¸§, salary ±Þ¿©, hire_date ÀÔ»çÀÏ
+SELECT tmp.rn RN, employee_id ì‚¬ë²ˆ,
+        first_name ì´ë¦„, salary ê¸‰ì—¬, hire_date ìž…ì‚¬ì¼
 FROM employees e, (SELECT employee_id eid, ROW_NUMBER() OVER (ORDER BY hire_date) rn
                  FROM employees) tmp
 WHERE tmp.rn > 10 AND tmp.rn < 16 AND e.employee_id = tmp.eid

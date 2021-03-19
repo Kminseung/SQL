@@ -1,67 +1,66 @@
 /*
-»ç¿ëÀÚ »ý¼º
+ì‚¬ìš©ìž ìƒì„±
     CREATE C##KMS IDENTIFIED BY 7777;
-    - ORACLE : »ç¿ëÀÚ »ý¼º -> µ¿ÀÏ ÀÌ¸§ÀÇ SCHEMAµµ °°ÀÌ »ý¼º
-»ç¿ëÀÚ »èÁ¦
+    - ORACLE : ì‚¬ìš©ìž ìƒì„± -> ë™ì¼ ì´ë¦„ì˜ SCHEMAë„ ê°™ì´ ìƒì„±
+ì‚¬ìš©ìž ì‚­ì œ
     DROP USER C##KMS
-    DROP USER C##KMS CASCADE - ¿¬°áµÈ °´Ã¼µµ ¸ðµÎ »èÁ¦
-±ÇÇÑÀ» °®°í ÀÖÁö ¾ÊÀ¸¸é ¾î¶² ÀÛ¾÷µµ ¼öÇà ºÒ°¡´É
+    DROP USER C##KMS CASCADE - ì—°ê²°ëœ ê°ì²´ë„ ëª¨ë‘ ì‚­ì œ
+ê¶Œí•œì„ ê°–ê³  ìžˆì§€ ì•Šìœ¼ë©´ ì–´ë–¤ ìž‘ì—…ë„ ìˆ˜í–‰ ë¶ˆê°€ëŠ¥
 */
+CREATE USER C##KMS IDENTIFIED BY 7777;
+-- systemìœ¼ë¡œ ì§„í–‰
+-- ì‚¬ìš©ìž ì •ë³´ í™•ì¸
+-- USER_USERS : í˜„ìž¬ ì‚¬ìš©ìž ê´€ë ¨ ì •ë³´
+-- ALL_USERS : DBì˜ ëª¨ë“  ì‚¬ìš©ìž ì •ë³´
+-- DBA_USERS : ëª¨ë“  ì‚¬ìš©ìžì˜ ìƒì„¸ ì •ë³´(DBA Only)
 
--- systemÀ¸·Î ÁøÇà
--- »ç¿ëÀÚ Á¤º¸ È®ÀÎ
--- USER_USERS : ÇöÀç »ç¿ëÀÚ °ü·Ã Á¤º¸
--- ALL_USERS : DBÀÇ ¸ðµç »ç¿ëÀÚ Á¤º¸
--- DBA_USERS : ¸ðµç »ç¿ëÀÚÀÇ »ó¼¼ Á¤º¸(DBA Only)
-
--- ÇöÀç »ç¿ëÀÚ È®ÀÎ
+-- í˜„ìž¬ ì‚¬ìš©ìž í™•ì¸
 SELECT * FROM USER_USERS;
 
--- ÀüÃ¼ »ç¿ëÀÚ È®ÀÎ
+-- ì „ì²´ ì‚¬ìš©ìž í™•ì¸
 SELECT * FROM ALL_USERS;
 
--- ·Î±×ÀÎ ±ÇÇÑ ºÎ¿©
-GRANT CREATE SESSION TO C##KMS;     -- C##KMS¿¡°Ô ¼¼¼Ç »ý¼º(·Î±×ÀÎ) ±ÇÇÑ ºÎ¿©
+-- ë¡œê·¸ì¸ ê¶Œí•œ ë¶€ì—¬
+GRANT CREATE SESSION TO C##KMS;     -- C##KMSì—ê²Œ ì„¸ì…˜ ìƒì„±(ë¡œê·¸ì¸) ê¶Œí•œ ë¶€ì—¬
 
--- CREATE TABLE test(a NUMBER);     ±ÇÇÑ ºÒÃæºÐ
-GRANT connect, resource TO C##KMS;      -- Á¢¼Ó°ú ±ÇÇÑ ºÎ¿©
+-- CREATE TABLE test(a NUMBER);     ê¶Œí•œ ë¶ˆì¶©ë¶„
+GRANT connect, resource TO C##KMS;      -- ì ‘ì†ê³¼ ê¶Œí•œ ë¶€ì—¬
 
 /*
 CREATE TABLE test(a NUMBER);
 SELECT * FROM TAB;
 DESC test;
 INSERT INTO test VALUES(10);
--- Å×ÀÌºí ½ºÆäÀÌ½º 'USERS'¿¡ ´ëÇÑ ±ÇÇÑÀÌ ¾ø½À´Ï´Ù.
+-- í…Œì´ë¸” ìŠ¤íŽ˜ì´ìŠ¤ 'USERS'ì— ëŒ€í•œ ê¶Œí•œì´ ì—†ìŠµë‹ˆë‹¤.
 */
 
 /*
-Oracle 12 ÀÌÈÄ
-    - ÀÏ¹Ý °èÁ¤ ±¸ºÐÇÏ±â À§ÇØ C## Á¢µÎ¾î
-    - ½ÇÁ¦ µ¥ÀÌÅÍ°¡ ÀúÀåµÉ Å×ÀÌºí ½ºÆäÀÌ½º¸¦ ¸¶·ÃÇØ Áà¾ß ÇÔ
+Oracle 12 ì´í›„
+    - ì¼ë°˜ ê³„ì • êµ¬ë¶„í•˜ê¸° ìœ„í•´ C## ì ‘ë‘ì–´
+    - ì‹¤ì œ ë°ì´í„°ê°€ ì €ìž¥ë  í…Œì´ë¸” ìŠ¤íŽ˜ì´ìŠ¤ë¥¼ ë§ˆë ¨í•´ ì¤˜ì•¼ í•¨
 */
 
 /* 
-C## ¾øÀÌ °èÁ¤À» »ý¼­ÇÏ´Â ¹æ¹ý
+C## ì—†ì´ ê³„ì •ì„ ìƒì„œí•˜ëŠ” ë°©ë²•
 */
 ALTER SESSION SET "_ORACLE_SCRIPT" = true;
 CREATE USER KMS IDENTIFIED BY 7777;
 
-/* »ç¿ëÀÚ µ¥ÀÌÅÍ ÀúÀå Å×ÀÌºí ½ºÆäÀÌ½º ºÎ¿© */
-ALTER USER C##KMS DEFAULT TABLESPACE USERS      -- C##KMS »ç¿ëÀÚ ÀúÀå°ø°£À» USER¿¡ ¸¶·Ã
-    QUOTA unlimited on USERS;   -- ÀúÀå °ø°£ ÇÑµµ¸¦ ºÎÇÑÀ¸·Î ºÎ¿©
+/* ì‚¬ìš©ìž ë°ì´í„° ì €ìž¥ í…Œì´ë¸” ìŠ¤íŽ˜ì´ìŠ¤ ë¶€ì—¬ */
+ALTER USER C##KMS DEFAULT TABLESPACE USERS      -- C##KMS ì‚¬ìš©ìž ì €ìž¥ê³µê°„ì„ USERì— ë§ˆë ¨
+    QUOTA unlimited on USERS;   -- ì €ìž¥ ê³µê°„ í•œë„ë¥¼ ë¶€í•œìœ¼ë¡œ ë¶€ì—¬
 
--- ROLEÀÇ »ý¼º
+-- ROLEì˜ ìƒì„±
 DROP ROLE dbuser;
-CREATE ROLE dbuser;     -- dbuser ¿ªÇÒÀ» ¸¸µé¾î ¿©·¯°³ÀÇ ±ÇÇÑÀ» ´ã¾ÆµÒ
-GRANT CREATE session TO dbuser;       -- dbuser ¿ªÇÒ¿¡ Á¢¼ÓÇÒ ¼ö ÀÖ´Â ±ÇÇÑ ºÎ¿©
-GRANT RESOURCE TO dbuser;       -- dbuser ¿ªÇÒ¿¡ ÀÚ¿ø »ý¼º ±ÇÇÑ ºÎ¿©
+CREATE ROLE dbuser;     -- dbuser ì—­í• ì„ ë§Œë“¤ì–´ ì—¬ëŸ¬ê°œì˜ ê¶Œí•œì„ ë‹´ì•„ë‘ 
+GRANT CREATE session TO dbuser;       -- dbuser ì—­í• ì— ì ‘ì†í•  ìˆ˜ ìžˆëŠ” ê¶Œí•œ ë¶€ì—¬
+GRANT RESOURCE TO dbuser;       -- dbuser ì—­í• ì— ìžì› ìƒì„± ê¶Œí•œ ë¶€ì—¬
 
--- ROLEÀ» GRANT ÇÏ¸é ³»ºÎ¿¡ ÀÖ´Â °³º° ±ÇÇÑÀÌ ¸ðµÎ ºÎ¿©
-GRANT dbuser TO KMS;    -- KMS »ç¿ëÀÚ¿¡°Ô dbuser ¿ªÇÒÀ» ºÎ¿©
+-- ROLEì„ GRANT í•˜ë©´ ë‚´ë¶€ì— ìžˆëŠ” ê°œë³„ ê¶Œí•œì´ ëª¨ë‘ ë¶€ì—¬
+GRANT dbuser TO KMS;    -- KMS ì‚¬ìš©ìžì—ê²Œ dbuser ì—­í• ì„ ë¶€ì—¬
 
--- ±ÇÇÑ È¸¼ö REBOKE
-REVOKE dbuser FROM KMS; -- KMS »ç¿ëÀÚ·ÎºÎÅÍ dbuser¿ªÇÒÀ» È¸¼ö
+-- ê¶Œí•œ íšŒìˆ˜ REBOKE
+REVOKE dbuser FROM KMS; -- KMS ì‚¬ìš©ìžë¡œë¶€í„° dbuserì—­í• ì„ íšŒìˆ˜
 
--- °èÁ¤ »èÁ¦
+-- ê³„ì • ì‚­ì œ
 DROP USER KMS CASCADE;
-
