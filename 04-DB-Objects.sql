@@ -38,3 +38,47 @@ CREATE OR REPLACE VIEW view_emp_10
     
 UPDATE view_emp_10 SET salary = salary * 2;
 -- 읽기 전용 뷰에서는 DML 작업 수행 불가
+
+-- COMPLEX VIEW
+-- 복수개의 Table or View를 기반
+-- 함수, 표현식을 포함할 수 있음
+-- 기본적으로 INSERT, UPDATE, DELETE 불가
+-- book 테이블 JOIN author -> VIEW
+SELECT * FROM author;
+SELECT * FROM book;
+
+INSERT INTO book
+VALUES(1, '토지', sysdate, 1);
+
+INSERT INTO book(book_id, title, author_id)
+VALUES(2, '살인자의 기억법', 2);
+
+SELECT * FROM book;
+COMMIT;
+
+CREATE OR REPLACE VIEW book_detail
+    (book_id, title, author, pub_date)
+    AS SELECT book_id, title, author_name, pub_date
+        FROM book b, author a
+        WHERE b. author_id = a.author_id;
+        
+DESC book_detail;
+
+SELECT * FROM book_detail;
+
+UPDATE book_detail SET author_name = '미상';      -- 기본적으로 복합 VIEW는 수정이 불가
+
+----------------------------------------
+-- VIEW를 위한 딕셔너리
+----------------------------------------
+SELECT * FROM user_views;
+-- 특정 view의 정보를 확인하려면 view_name 조건으로 조회
+SELECT * FROM user_views
+WHERE view_name = 'BOOK_DETAIL';
+
+SELECT * FROM user_objects
+WHERE object_type = 'VIEW';
+
+-- VIEW 삭제
+DROP VIEW book_detail;
+SELECT * FROM user_views ;

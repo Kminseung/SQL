@@ -168,3 +168,18 @@ WHERE table_name = 'BOOK';
 -- 계정 별로 USER_(일반 사용자), ALL_(전체 사용자), DBA_(관리자 전용) 접근 범위 제한
 SHOW user;
 SELECT * FROM dictionary;
+
+
+-- DBA Dictionary 확인
+-- dba 로그인 필요 as sysdba
+
+-- 사용자 DB 객체 Dictionary USER_OBJECTS
+SELECT * FROM user_objects;
+SELECT object_name, object_type FROM user_objects;
+SELECT * FROM user_objects WHERE OBJECT_NAME = 'BOOK';
+
+-- 제약조건 확인 dictionary USER_CONSTRAINTS
+SELECT * FROM user_constraints;
+
+-- 제약조건이 걸린 컬럼 확인
+SELECT * FROM user_cons_columns;
