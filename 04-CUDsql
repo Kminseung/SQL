@@ -53,3 +53,41 @@ UPDATE author SET author_desc = '알쓸신잡 출연'
 WHERE author_id = '2';
 
 SELECT * FROM author;
+
+-- 임시 테이블 생성
+-- hr.employees 테이블로부터 department_id가 10, 20, 30인 사람들만 뽑아서
+-- 새로운 테이블 생성
+CREATE TABLE emp_123 AS
+    (SELECT * FROM hr.employees
+        WHERE department_id IN (10, 20, 30));
+DESC emp_123;
+
+-- 연습 : 부서가 30인 직원들의 급여를 10% 인상
+SELECT * FROM emp_123 WHERE department_id=30;
+UPDATE emp_123
+SET salary = salary + salary * 0.1
+WHERE department_id = 30;
+
+COMMIT;
+
+-- DELETE FROM 테이블명 WHERE 삭제조건
+SELECT * FROM emp_123;
+
+-- job_id 가 mk로 시작하는 직원을 삭제
+DELETE FROM emp_123
+WHERE job_id LIKE 'MK_%';
+SELECT * FROM emp_123;
+
+-- WHERE 절이 없는 DELETE는 모든 레코드를 삭제
+DELETE FROM emp_123;
+SELECT * FROM emp_123;
+
+-- DELETE 는 TRANSACTION 대상 -> ROLLBACK 가능
+ROLLBACK;
+SELECT * FROM emp_123;
+
+-- TRUNCATE : 테이블 비우기
+TRUNCATE TABLE emp_123;
+-- 주의 : TRUNCATE는 TRANSACTION의 대상이 아니므로 ROLLBACK 불가
+ROLLBACK;
+SELECT * FROM emp_123;
