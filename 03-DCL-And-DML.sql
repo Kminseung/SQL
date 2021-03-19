@@ -145,3 +145,26 @@ DESC book;
 ALTER TABLE book
 ADD CONSTRAINT pk_book_id PRIMARY KEY(book_id);
 DESC book;
+
+-- FORRIGN KEY 추가
+-- book 테이블의 author_id가 author의 author_id를 참조
+ALTER TABLE book
+ADD CONSTRAINT
+    fk_author_id FOREIGN KEY (author_id)
+        REFERENCES author(author_id);
+DESC book;
+
+-- COMMENT
+COMMENT ON TABLE book IS 'Book Information';
+COMMENT ON TABLE author IS 'Author Information';
+
+-- Check Comment
+SELECT * FROM user_tab_comments;
+SELECT comments FROM user_tab_comments
+WHERE table_name = 'BOOK';
+
+-- Data Dictionarty
+-- 내부에서 발생하는 모든 정보를 담고 있음
+-- 계정 별로 USER_(일반 사용자), ALL_(전체 사용자), DBA_(관리자 전용) 접근 범위 제한
+SHOW user;
+SELECT * FROM dictionary;
