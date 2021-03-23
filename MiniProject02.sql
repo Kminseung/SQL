@@ -1,0 +1,18 @@
+CREATE TABLE PHONE_BOOK (
+    id NUMBER(10) PRIMARY KEY,
+    name VARCHAR2(10),
+    hp VARCHAR2(20),
+    tel VARCHAR2(20));
+
+CREATE SEQUENCE seq_phone_book
+    START WITH 1
+    INCREMENT BY 1
+    MAXVALUE 1000000;
+
+INSERT INTO phone_book
+VALUES(seq_phone_book.NEXTVAL, '고길동', '010-1234-5678', '02-9876-5432');
+DELETE FROM phone_book WHERE id = 21;
+
+SELECT * FROM phone_book ORDER BY id;
+
+COMMIT;
