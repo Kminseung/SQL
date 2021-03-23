@@ -11,7 +11,6 @@ CREATE SEQUENCE seq_phone_book
 
 INSERT INTO phone_book
 VALUES(seq_phone_book.NEXTVAL, '고길동', '010-1234-5678', '02-9876-5432');
-DELETE FROM phone_book WHERE id = 21;
 
 SELECT * FROM phone_book ORDER BY id;
 
